@@ -468,9 +468,21 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 text-center text-xs text-gray-600 space-y-2">
+      <footer className="py-6 text-center text-xs text-gray-400 space-y-2">
         <p>{t.localProcessing}</p>
-        <p className="opacity-50">Powered by Google AI Studio</p>
+        <p>
+          {t.termsPrefix}
+          <a
+            href="https://ukpr-riyoukiyaku.pages.dev/#/tos/pixmorph"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            {t.termsLinkText}
+          </a>
+          {t.termsSuffix}
+        </p>
+        <p className="opacity-75">Powered by Google AI Studio</p>
       </footer>
     </div>
   );

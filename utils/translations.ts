@@ -37,6 +37,9 @@ export const translations = {
     selectedCount: "選択中",
     noSelection: "ファイルを選択してください",
     originalSize: "元サイズ",
+    termsPrefix: "このツールを利用すると",
+    termsLinkText: "利用規約",
+    termsSuffix: "に同意したうえで利用したこととみなします。",
   },
   en: {
     title: "PixMorph",
@@ -74,5 +77,8 @@ export const translations = {
     selectedCount: "Selected",
     noSelection: "Select files",
     originalSize: "Original",
+    termsPrefix: "By using this tool, you agree to the ",
+    termsLinkText: "Terms of Service",
+    termsSuffix: ".",
   }
 };
