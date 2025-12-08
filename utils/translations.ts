@@ -2,7 +2,7 @@ export type Language = 'ja' | 'en';
 
 export const translations = {
   ja: {
-    title: "PixMorph",
+    title: "Pix Morph",
     subtitle: "画像一括変換・リサイズツール",
     dropzoneTitle: "クリックしてファイルを選択、またはドラッグ＆ドロップ",
     dropzoneSubtitle: "JPG, PNG, WEBP 等に対応",
@@ -11,6 +11,12 @@ export const translations = {
     quality: "画質",
     resizeTitle: "サイズ変更",
     scale: "倍率",
+    width: "幅",
+    height: "高さ",
+    modeScale: "倍率",
+    modePx: "px",
+    modeCm: "cm",
+    maintainAspectRatio: "縦横比を維持",
     renameTitle: "ファイル名設定",
     baseFilename: "ファイル名 (任意)",
     baseFilenamePlaceholder: "入力がない場合は元の名前を使用",
@@ -42,7 +48,7 @@ export const translations = {
     termsSuffix: "に同意したうえで利用したこととみなします。",
   },
   en: {
-    title: "PixMorph",
+    title: "Pix Morph",
     subtitle: "Batch Converter & Resizer",
     dropzoneTitle: "Click to select files or drag and drop",
     dropzoneSubtitle: "Supports JPG, PNG, WEBP, etc.",
@@ -51,6 +57,12 @@ export const translations = {
     quality: "Quality",
     resizeTitle: "Resize",
     scale: "Scale",
+    width: "Width",
+    height: "Height",
+    modeScale: "Scale",
+    modePx: "px",
+    modeCm: "cm",
+    maintainAspectRatio: "Maintain Aspect Ratio",
     renameTitle: "Renaming",
     baseFilename: "Filename (Optional)",
     baseFilenamePlaceholder: "Keep original if empty",

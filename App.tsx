@@ -8,7 +8,7 @@ import FileDropzone from './components/FileDropzone';
 import FileItem from './components/FileItem';
 import Button from './components/Button';
 
-import { ProcessedFile, ProcessStatus, OutputFormat, ConversionSettings } from './types';
+import { ProcessedFile, ProcessStatus, OutputFormat, ConversionSettings, ResizeMode } from './types';
 import { convertImage, getExtensionFromMime } from './services/imageService';
 import { translations, Language } from './utils/translations';
 
@@ -19,7 +19,11 @@ const App: React.FC = () => {
   const [settings, setSettings] = useState<ConversionSettings>({
     format: OutputFormat.JPEG,
     quality: 0.9,
+    resizeMode: 'scale',
     scale: 1.0,
+    width: '',
+    height: '',
+    maintainAspectRatio: true,
     baseFilename: '',
     useSequentialNumbering: false,
   });
@@ -114,9 +118,7 @@ const App: React.FC = () => {
 
         const blob = await convertImage(
           fileItem.originalFile, 
-          settings.format, 
-          settings.quality,
-          settings.scale
+          settings
         );
 
         setFiles(current => 
@@ -250,30 +252,99 @@ const App: React.FC = () => {
                 <h2 className="font-semibold">{t.resizeTitle}</h2>
              </div>
 
-             <div className="space-y-4 flex-1">
-                <div>
-                   <label className="flex justify-between text-xs text-gray-400 mb-1.5">
-                      <span>{t.scale}</span>
-                      <span className="text-secondary font-mono font-bold">
-                        {settings.scale === 1 ? t.originalSize : `${Math.round(settings.scale * 100)}%`}
-                      </span>
-                   </label>
-                   <input 
-                      type="range" 
-                      min="0.1" 
-                      max="1" 
-                      step="0.1" 
-                      value={settings.scale}
-                      onChange={(e) => setSettings(s => ({ ...s, scale: parseFloat(e.target.value) }))}
-                      className="w-full h-2 bg-dark rounded-lg appearance-none cursor-pointer accent-secondary"
-                      disabled={isProcessing}
-                   />
-                   <div className="flex justify-between text-[10px] text-gray-600 mt-1">
-                      <span>10%</span>
-                      <span>50%</span>
-                      <span>100%</span>
-                   </div>
-                </div>
+             <div className="space-y-4 flex-1 flex flex-col">
+               {/* Unit Switcher */}
+               <div className="flex items-center bg-dark border border-gray-700 rounded-lg p-1 mb-2">
+                 <button
+                   onClick={() => setSettings(s => ({ ...s, resizeMode: 'scale' }))}
+                   className={`flex-1 px-2 py-1.5 text-xs font-medium rounded-md transition-colors ${settings.resizeMode === 'scale' ? 'bg-secondary text-white shadow-sm' : 'text-gray-400 hover:text-gray-200'}`}
+                   disabled={isProcessing}
+                 >
+                   {t.modeScale}
+                 </button>
+                 <button
+                   onClick={() => setSettings(s => ({ ...s, resizeMode: 'px' }))}
+                   className={`flex-1 px-2 py-1.5 text-xs font-medium rounded-md transition-colors ${settings.resizeMode === 'px' ? 'bg-secondary text-white shadow-sm' : 'text-gray-400 hover:text-gray-200'}`}
+                   disabled={isProcessing}
+                 >
+                   {t.modePx}
+                 </button>
+                 <button
+                   onClick={() => setSettings(s => ({ ...s, resizeMode: 'cm' }))}
+                   className={`flex-1 px-2 py-1.5 text-xs font-medium rounded-md transition-colors ${settings.resizeMode === 'cm' ? 'bg-secondary text-white shadow-sm' : 'text-gray-400 hover:text-gray-200'}`}
+                   disabled={isProcessing}
+                 >
+                   {t.modeCm}
+                 </button>
+               </div>
+
+                {settings.resizeMode === 'scale' ? (
+                  <div>
+                     <label className="flex justify-between text-xs text-gray-400 mb-1.5">
+                        <span>{t.scale}</span>
+                        <span className="text-secondary font-mono font-bold">
+                          {settings.scale === 1 ? t.originalSize : `${Math.round(settings.scale * 100)}%`}
+                        </span>
+                     </label>
+                     <input 
+                        type="range" 
+                        min="0.1" 
+                        max="1" 
+                        step="0.1" 
+                        value={settings.scale}
+                        onChange={(e) => setSettings(s => ({ ...s, scale: parseFloat(e.target.value) }))}
+                        className="w-full h-2 bg-dark rounded-lg appearance-none cursor-pointer accent-secondary"
+                        disabled={isProcessing}
+                     />
+                     <div className="flex justify-between text-[10px] text-gray-600 mt-1">
+                        <span>10%</span>
+                        <span>50%</span>
+                        <span>100%</span>
+                     </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-end gap-2">
+                      <div className="flex-1">
+                        <label className="block text-xs text-gray-400 mb-1.5">{t.width} ({settings.resizeMode})</label>
+                        <input 
+                          type="number"
+                          min="0"
+                          step={settings.resizeMode === 'cm' ? "0.1" : "1"}
+                          className="w-full bg-dark border border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-secondary outline-none transition-all placeholder-gray-600"
+                          placeholder="Auto"
+                          value={settings.width}
+                          onChange={(e) => setSettings(s => ({ ...s, width: e.target.value === '' ? '' : parseFloat(e.target.value) }))}
+                          disabled={isProcessing}
+                        />
+                      </div>
+                      <span className="text-gray-500 pb-2">x</span>
+                      <div className="flex-1">
+                        <label className="block text-xs text-gray-400 mb-1.5">{t.height} ({settings.resizeMode})</label>
+                        <input 
+                          type="number"
+                          min="0"
+                          step={settings.resizeMode === 'cm' ? "0.1" : "1"}
+                          className="w-full bg-dark border border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-secondary outline-none transition-all placeholder-gray-600"
+                          placeholder="Auto"
+                          value={settings.height}
+                          onChange={(e) => setSettings(s => ({ ...s, height: e.target.value === '' ? '' : parseFloat(e.target.value) }))}
+                          disabled={isProcessing}
+                        />
+                      </div>
+                    </div>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input 
+                        type="checkbox"
+                        checked={settings.maintainAspectRatio}
+                        onChange={(e) => setSettings(s => ({ ...s, maintainAspectRatio: e.target.checked }))}
+                        className="rounded border-gray-600 bg-dark text-secondary focus:ring-secondary/50 accent-secondary"
+                        disabled={isProcessing}
+                      />
+                      <span className="text-xs text-gray-300">{t.maintainAspectRatio}</span>
+                    </label>
+                  </div>
+                )}
              </div>
           </div>
 

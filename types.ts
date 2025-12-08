@@ -21,10 +21,19 @@ export interface ProcessedFile {
   error?: string;
 }
 
+export type ResizeMode = 'scale' | 'px' | 'cm';
+
 export interface ConversionSettings {
   format: OutputFormat;
   quality: number; // 0 to 1
+  
+  // Resize Settings
+  resizeMode: ResizeMode;
   scale: number; // 0.1 to 1
+  width: number | ''; // px or cm value
+  height: number | ''; // px or cm value
+  maintainAspectRatio: boolean;
+
   baseFilename: string;
   useSequentialNumbering: boolean;
 }
