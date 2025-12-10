@@ -2,22 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    /* theme('colors.dark') refers to the color defined in tailwind.config.js */
-    background-color: theme('colors.dark');
-    color: #f8fafc; /* slate-50 */
-    font-family: 'Inter', sans-serif;
-  }
-}
-
 @layer utilities {
   /* Custom scrollbar for webkit */
   ::-webkit-scrollbar {
     width: 8px;
   }
   ::-webkit-scrollbar-track {
-    background-color: theme('colors.surface');
+    background-color: #1e293b; /* surface color */
   }
   ::-webkit-scrollbar-thumb {
     background-color: #475569; /* slate-600 */
